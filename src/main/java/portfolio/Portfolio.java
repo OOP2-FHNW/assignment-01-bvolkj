@@ -18,26 +18,27 @@ public class Portfolio<T extends Investment> {
     }
 
     public void buy(T investment) {
-        if (investments.containsKey(investment.getTitel())) {
-            investment = investments.get(investment.getTitel());
+        String investmentTitel = investment.getTitel();
+        if (contains(investment)) {
+            investment = getShare(investmentTitel);
             investment.setCount(investment.getCount() + 1);
             return;
         }
-        investments.put(investment.getTitel(), investment);
+        investments.put(investmentTitel, investment);
     }
 
-    public void sell(String name, int amount) {
-        if(!investments.containsKey(name)){
-           return;
+    public void sell(String investmentTitel, int amount) {
+        T investment = getShare(investmentTitel);
+        if (investment == null) {
+            return;
         }
-        T investment = investments.get(name);
-        if( investment.getCount() <= amount){
-            investments.remove(name);
+        if (investment.getCount() <= amount) {
+            investments.remove(investmentTitel);
         }
         investment.setCount(investment.getCount() - amount);
     }
 
-    public T getShare(String name) {
-        return investments.get(name);
+    public T getShare(String investmentTitel) {
+        return investments.get(investmentTitel);
     }
 }
